@@ -1,64 +1,48 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Current_Contol_Task;
-using System.Windows.Forms;
-using System.IO;
 
 namespace Tests
 {
     [TestClass]
-    public class ExamGradingTests
+    public class MainWindowTests
     {
         [TestMethod]
-        public void TestPositiveCalculation()
+        public void CalculateButton_Click_Should_Calculate_Grade_Correctly_For_Excellent_Score()
         {
-            // Arrange
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.module1ScoreTextBox.Text = "20";
-            mainWindow.module2ScoreTextBox.Text = "20";
-            mainWindow.module3ScoreTextBox.Text = "20";
+            var mainWindow = new Current_Contol_Task.MainWindow();
 
-            // Act
-            mainWindow.CalculateButton_Click(null, null);
+            mainWindow.Calculating(20, 30, 18);
 
-            // Assert
-            Assert.AreEqual("Общее количество баллов: 60\nОценка: 5 (Отлично)", mainWindow.resultTextBlock.Text);
+            Assert.AreEqual("Общее количество баллов: 68\nОценка: 5 (Отлично)", mainWindow.resultTextBlock.Text);
         }
 
         [TestMethod]
-        public void TestExcellentGrade()
+        public void CalculateButton_Click_Should_Show_Error_Message_For_Negative_Score()
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.module1ScoreTextBox.Text = "22";
-            mainWindow.module2ScoreTextBox.Text = "38";
-            mainWindow.module3ScoreTextBox.Text = "20";
+            var mainWindow = new Current_Contol_Task.MainWindow();
 
-            mainWindow.CalculateButton_Click(null, null);
+            mainWindow.Calculating(-5, 30, 18);
 
-            Assert.AreEqual("Общее количество баллов: 80\nОценка: 5 (Отлично)", mainWindow.resultTextBlock.Text);
+            Assert.AreEqual("Баллы не могут принимать отрицательные значения.", mainWindow.resultTextBlock.Text);
         }
 
         [TestMethod]
-        public void TestNegativeInput()
+        public void CalculateButton_Click_Should_Show_Error_Message_For_Exceeding_Maximum_Score()
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.module1ScoreTextBox.Text = "text"; 
+            var mainWindow = new Current_Contol_Task.MainWindow();
 
-            mainWindow.CalculateButton_Click(null, null);
+            mainWindow.Calculating(20, 40, 25);
 
-            Assert.AreEqual("Введите корректные значения для всех модулей.", MessageBox.Show("Введите корректные значения для всех модулей.").ToString());
-
+            Assert.AreEqual("Баллы за модуль не могут превышать максимальное количество.", mainWindow.resultTextBlock.Text);
         }
 
         [TestMethod]
-        public void TestExceedingMaxScore()
+        public void CalculateButton_Click_Should_Show_Error_Message_For_Incorrect_Format()
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.module1ScoreTextBox.Text = "30"; 
+            var mainWindow = new Current_Contol_Task.MainWindow();
 
-            mainWindow.CalculateButton_Click(null, null);
+            mainWindow.Calculating(10, 20, 30);
 
-            string actualErrorMessage = string.Empty;
-
+            Assert.AreEqual("Баллы за модуль не могут превышать максимальное количество.", mainWindow.resultTextBlock.Text);
         }
     }
 }
