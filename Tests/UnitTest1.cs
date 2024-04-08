@@ -6,7 +6,7 @@ namespace Tests
     public class MainWindowTests
     {
         [TestMethod]
-        public void CalculateButton_Click_Should_Calculate_Grade_Correctly_For_Excellent_Score()
+        public void Excellent_Score()
         {
             var mainWindow = new Current_Contol_Task.MainWindow();
 
@@ -16,7 +16,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void CalculateButton_Click_Should_Show_Error_Message_For_Negative_Score()
+        public void Negative_Score()
         {
             var mainWindow = new Current_Contol_Task.MainWindow();
 
@@ -26,7 +26,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void CalculateButton_Click_Should_Show_Error_Message_For_Exceeding_Maximum_Score()
+        public void Exceeding_Maximum_Score()
         {
             var mainWindow = new Current_Contol_Task.MainWindow();
 
@@ -36,13 +36,21 @@ namespace Tests
         }
 
         [TestMethod]
-        public void CalculateButton_Click_Should_Show_Error_Message_For_Incorrect_Format()
+        public void Incorrect_Format()
         {
+            // Этот тест пришлось написать используя графические элементы,
+            // а не Calculating() напрямую, т.к. он предполагает ввод значеинй типа int
+            // и ввод пустых значений такии образом не представляется возможным.
+
             var mainWindow = new Current_Contol_Task.MainWindow();
 
-            mainWindow.Calculating(10, 20, 30);
+            mainWindow.module1ScoreTextBox.Text = "";
+            mainWindow.module2ScoreTextBox.Text = "";
+            mainWindow.module3ScoreTextBox.Text = "";
 
-            Assert.AreEqual("Баллы за модуль не могут превышать максимальное количество.", mainWindow.resultTextBlock.Text);
+            mainWindow.CalculateButton_Click(null, null);
+
+            Assert.AreEqual("Введите корректные значения для всех модулей.", mainWindow.resultTextBlock.Text);
         }
     }
 }
